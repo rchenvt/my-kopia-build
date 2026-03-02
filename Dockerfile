@@ -1,6 +1,8 @@
 # Build the thin Alpine-based image
 FROM alpine:3.23
 
+ARG TARGETARCH
+
 # Install dependencies required for HA sync and Kopia operations
 # - ca-certificates: Required for cloud storage/HTTPS connectivity
 # - fuse3: Required if you intend to use 'kopia mount'
