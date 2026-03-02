@@ -16,7 +16,7 @@ RUN apk add --no-cache \
 
 RUN KOPIA_ARCH=$( [ "$TARGETARCH" = "amd64" ] && echo "x64" || echo "arm64" ) && \
     LATEST_KOPIA_TAG=$(curl -s https://api.github.com/repos/kopia/kopia/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') && \
-    curl -L "https://github.com/kopia/kopia/releases/download/v{LATEST_KOPIA_TAG}/kopia-${LATEST_KOPIA_TAG}-linux-${KOPIA_ARCH}.tar.gz" \
+    curl -L "https://github.com/kopia/kopia/releases/download/v${LATEST_KOPIA_TAG}/kopia-${LATEST_KOPIA_TAG}-linux-${KOPIA_ARCH}.tar.gz" \
     | tar -xz -C /bin/ --strip-components=1 "kopia-${LATEST_KOPIA_TAG}-linux-${KOPIA_ARCH}/kopia" && \
     chmod +x /bin/kopia
 
