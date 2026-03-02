@@ -22,10 +22,9 @@ RUN KOPIA_ARCH=$( [ "$TARGETARCH" = "amd64" ] && echo "x64" || echo "arm64" ) &&
 
 # Rclone provides a 'current' link that always points to the latest stable release
 RUN curl -L "https://downloads.rclone.org/rclone-current-linux-${TARGETARCH}.zip" -o rclone.zip && \
-    unzip rclone.zip && \
-    cp rclone-*-linux-${TARGETARCH}/rclone /bin/rclone && \
+    unzip -j rclone.zip "*/rclone" -d /bin/ && \
     chmod +x /bin/rclone && \
-    rm -rf rclone.zip rclone-*-linux-${TARGETARCH}
+    rm -rf rclone*
 
 RUN apk del tar unzip && rm -rf /var/cache/apk/*
 
