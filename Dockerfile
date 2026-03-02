@@ -21,7 +21,7 @@ RUN KOPIA_ARCH=$( [ "$TARGETARCH" = "amd64" ] && echo "x64" || echo "arm64" ) &&
     chmod +x /bin/kopia
 
 # Rclone provides a 'current' link that always points to the latest stable release
-RUN curl -L "https://downloads.rclone.org/rclone-current-linux-{TARGETARCH}.zip" -o rclone.zip && \
+RUN curl -L "https://downloads.rclone.org/rclone-current-linux-${TARGETARCH}.zip" -o rclone.zip && \
     unzip rclone.zip && \
     cp rclone-*-linux-${TARGETARCH}/rclone /bin/rclone && \
     chmod +x /bin/rclone && \
