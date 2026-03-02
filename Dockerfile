@@ -20,7 +20,7 @@ RUN KOPIA_ARCH=$( [ "$TARGETARCH" = "amd64" ] && echo "x64" || echo "arm64" ) &&
     | tar -xz -C /bin/ --strip-components=1 "kopia-${LATEST_KOPIA_TAG}-linux-${KOPIA_ARCH}/kopia" && \
     chmod +x /bin/kopia
 
-RUN LATEST_RCLONE_VER=$(curl -sSfL https://downloads.rclone.org/version.txt | head -n 1 | sed 's/rclone //') && \
+RUN LATEST_RCLONE_VER=$(curl -sSfL https://downloads.rclone.org/version.txt | head -n 1 | sed 's/rclone //' | tr -d '\r') && \
     curl -fL "https://downloads.rclone.org/${LATEST_RCLONE_VER}/rclone-${LATEST_RCLONE_VER}-linux-${TARGETARCH}.zip" -o rclone.zip && \
     unzip -j rclone.zip "*/rclone" -d /bin/ && \
     chmod +x /bin/rclone && \
