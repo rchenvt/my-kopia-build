@@ -24,7 +24,7 @@ RUN KOPIA_ARCH=$( [ "$TARGETARCH" = "amd64" ] && echo "x64" || echo "arm64" ) &&
 RUN curl -L "https://downloads.rclone.org/rclone-current-linux-${TARGETARCH}.zip" -o rclone.zip && \
     unzip -j rclone.zip "*/rclone" -d /bin/ && \
     chmod +x /bin/rclone && \
-    rm -rf rclone*
+    rm -f rclone.zip
 
 RUN apk del tar unzip && rm -rf /var/cache/apk/*
 
