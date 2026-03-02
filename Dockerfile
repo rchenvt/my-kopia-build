@@ -8,7 +8,6 @@ FROM alpine:3.23
 RUN apk add --no-cache \
     tar \
     unzip \
-    jq \
     curl \
     sshfs \
     ca-certificates \
@@ -16,7 +15,7 @@ RUN apk add --no-cache \
     tzdata
 
 RUN KOPIA_ARCH=$( [ "$TARGETARCH" = "amd64" ] && echo "x64" || echo "arm64" ) && \
-    LATEST_KOPIA_TAG=$(curl -s https://api.github.com | jq -r .tag_name | sed 's/^v//') && \
+    LATEST_KOPIA_TAG=$(curl -s https://api.github.com/repos/kopia/kopia/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') && \
     curl -L "https://github.com/kopia/kopia/releases/download/v{LATEST_KOPIA_TAG}/kopia-${LATEST_KOPIA_TAG}-linux-${KOPIA_ARCH}.tar.gz" \
     | tar -xz -C /bin/ --strip-components=1 "kopia-${LATEST_KOPIA_TAG}-linux-${KOPIA_ARCH}/kopia" && \
     chmod +x /bin/kopia
@@ -28,15 +27,15 @@ RUN curl -L "https://downloads.rclone.org/rclone-current-linux-{TARGETARCH}.zip"
     chmod +x /bin/rclone && \
     rm -rf rclone.zip rclone-*-linux-${TARGETARCH}
 
-RUN apk del tar unzip jq && rm -rf /var/cache/apk/*
+RUN apk del tar unzip && rm -rf /var/cache/apk/*
 
 # Create the alpine user/group (UID/GID 1000) for your setup
-RUN addgroup -g 1000 alpine && \
-    adduser -u 1000 -G alpine -D alpine
+RUN addgroup -g 1000 kopia && \
+    adduser -u 1000 -G kopia -D kopia
 
 # Replicate the official directory structure
 RUN mkdir -p /app/config /app/cache /app/logs /repository  && \
-    chown -R alpine:alpine /app && chown -R alpine:alpine /repository
+    chown -R kopia:kopia /app /repository
 
 # Set official environment variables used by Kopia's entrypoint logic
 ENV TERM="xterm-256color" \
@@ -52,7 +51,7 @@ ENV TERM="xterm-256color" \
 EXPOSE 51515
 
 # Use the official user context
-USER alpine
+USER kopia
 WORKDIR /app
 
 # Replicate the official Entrypoint and default Command
